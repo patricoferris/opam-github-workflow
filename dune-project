@@ -26,7 +26,8 @@
   opam-format
   opam-state
   github-workflow
-  (alcotest :with-test)))
+  (alcotest :with-test)
+  (mdx :with-test)))
 
 (package
  (name github-workflow)
