@@ -13,11 +13,11 @@ jobs:
       with:
         ocaml-version: ${{ matrix.ocaml-version }}
     - name: Pinning Package
-      run: opam pin add opam-github-workflow.dev github-workflow.dev -n .
+      run: opam pin add -n -y .
     - name: Packages
       run: opam depext -yt opam-github-workflow github-workflow
     - name: Dependencies
-      run: opam install -t . --deps-only
+      run: opam install -t -y . --deps-only
     - name: Building
       run: opam exec -- dune build
     - name: Testing

@@ -31,9 +31,6 @@ let test () =
   if List.length opam = 0 then raise NoOpamFiles;
   let packages = List.map (fun f -> OpamPackage.Name.to_string (fst f)) opam in
   let name = Some ("Tests for " ^ join packages) in
-  let dev_packages =
-    String.concat " " (List.map (fun p -> p ^ ".dev") packages)
-  in
   let packages = String.concat " " packages in
   let matrix =
     Some
@@ -61,7 +58,7 @@ let test () =
       {
         step with
         step_name = Some "Pinning Package";
-        step_run = Some ("opam pin add " ^ dev_packages ^ " -n .");
+        step_run = Some "opam pin add -n -y .";
       };
       {
         step with
@@ -71,7 +68,7 @@ let test () =
       {
         step with
         step_name = Some "Dependencies";
-        step_run = Some "opam install -t . --deps-only";
+        step_run = Some "opam install -t -y . --deps-only";
       };
       {
         step with
