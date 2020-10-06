@@ -37,9 +37,15 @@ type step = {
   step_run : string option; [@key "run"]
 }
 
+type strategy = {
+  matrix : kv option;
+  fail_fast : bool option; [@key "fail-fast"]
+  max_parallel : int option; [@key "max-parallel"]
+}
+
 type job = {
   job_name : string option; [@key "name"]
-  strategy : kv option;
+  strategy : strategy option;
   runs_on : string; [@key "runs-on"]
   outputs : output option;
   job_env : env option; [@key "env"]

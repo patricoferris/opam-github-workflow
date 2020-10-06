@@ -14,8 +14,9 @@ Source a project and try building a test workflow
   jobs:
     test:
       strategy:
-        operating-system: [macos-latest, ubuntu-latest, windows-latest]
-        ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+        matrix:
+          operating-system: [macos-latest, ubuntu-latest, windows-latest]
+          ocaml-version: [4.11.0, 4.10.0, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
@@ -39,8 +40,9 @@ Passing stdout should print the workflow to standard out
   jobs:
     test:
       strategy:
-        operating-system: [macos-latest, ubuntu-latest, windows-latest]
-        ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+        matrix:
+          operating-system: [macos-latest, ubuntu-latest, windows-latest]
+          ocaml-version: [4.11.0, 4.10.0, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2

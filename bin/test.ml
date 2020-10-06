@@ -35,7 +35,7 @@ let test () =
     String.concat " " (List.map (fun p -> p ^ ".dev") packages)
   in
   let packages = String.concat " " packages in
-  let strategy =
+  let matrix =
     Some
       (simple_kv
          [
@@ -44,7 +44,16 @@ let test () =
          ])
   in
   let checkout = { step with uses = Some Config.checkout } in
-  let setup = { step with uses = Some Config.setup_ocaml } in
+  let setup =
+    {
+      step with
+      uses = Some Config.setup_ocaml;
+      with_ =
+        Some
+          (simple_kv
+             [ ("ocaml-version", string (expr "matrix.ocaml-version")) ]);
+    }
+  in
   let steps =
     [
       checkout;
@@ -77,7 +86,14 @@ let test () =
     ]
   in
   let test_job =
-    { test = { (job (expr "matrix.operating-system")) with strategy; steps } }
+    {
+      test =
+        {
+          (job (expr "matrix.operating-system")) with
+          strategy = Some { strategy with matrix };
+          steps;
+        };
+    }
   in
   let on = simple_event [ "push"; "pull_request" ] in
   let w : test Types.t = { (t test_job) with name; on } in

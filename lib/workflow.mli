@@ -37,6 +37,9 @@ val t : 'a -> 'a t
 val expr : string -> string
 (** [expr s] constructs a Github Yaml expressions i.e. ["${{ s }}"] *)
 
+val strategy : strategy
+(** An empty strategy *)
+
 val job : string -> job
 (** [job runs_on] constructs a new job to run on [runs_on] -- note to get a list
     of items you should use the matrix approach *)

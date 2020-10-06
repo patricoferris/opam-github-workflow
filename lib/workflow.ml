@@ -35,6 +35,9 @@ let job runs_on : job =
     strategy = None;
   }
 
+let strategy : strategy =
+  { matrix = None; fail_fast = None; max_parallel = None }
+
 let step : step =
   {
     step_name = None;

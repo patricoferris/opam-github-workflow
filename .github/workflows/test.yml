@@ -3,12 +3,15 @@ on: [push, pull_request]
 jobs:
   test:
     strategy:
-      operating-system: [macos-latest, ubuntu-latest, windows-latest]
-      ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+      matrix:
+        operating-system: [macos-latest, ubuntu-latest, windows-latest]
+        ocaml-version: [4.11.0, 4.10.0, 4.09.1]
     runs-on: ${{ matrix.operating-system }}
     steps:
     - uses: actions/checkout@v2
     - uses: avsm/setup-ocaml@v1.1.2
+      with:
+        ocaml-version: ${{ matrix.ocaml-version }}
     - name: Pinning Package
       run: opam pin add opam-github-workflow.dev github-workflow.dev -n .
     - name: Packages
