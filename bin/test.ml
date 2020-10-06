@@ -27,73 +27,57 @@ let get_opam_files () =
   |> remove_and_read []
 
 let test () =
+  let open Yaml_util in
   let opam = get_opam_files () in
   if List.length opam = 0 then raise NoOpamFiles;
   let packages = List.map (fun f -> OpamPackage.Name.to_string (fst f)) opam in
-  let name = Some ("Tests for " ^ join packages) in
+  let name = "Tests for " ^ join packages in
   let packages = String.concat " " packages in
   let matrix =
-    Some
-      (simple_kv
-         [
-           ("operating-system", list string Config.oses);
-           ("ocaml-version", list string Config.ocaml_versions);
-         ])
+    simple_kv
+      [
+        ("operating-system", list string Config.oses);
+        ("ocaml-version", list string Config.ocaml_versions);
+      ]
   in
   let checkout = { step with uses = Some Config.checkout } in
   let setup =
-    {
-      step with
-      uses = Some Config.setup_ocaml;
-      with_ =
-        Some
-          (simple_kv
-             [ ("ocaml-version", string (expr "matrix.ocaml-version")) ]);
-    }
+    step
+    |> with_uses Config.setup_ocaml
+    |> with_with
+         (simple_kv [ ("ocaml-version", string (expr "matrix.ocaml-version")) ])
   in
   let steps =
     [
       checkout;
       setup;
-      {
-        step with
-        step_name = Some "Pinning Package";
-        step_run = Some "opam pin add -n -y .";
-      };
-      {
-        step with
-        step_name = Some "Packages";
-        step_run = Some ("opam depext -yt " ^ packages);
-      };
-      {
-        step with
-        step_name = Some "Dependencies";
-        step_run = Some "opam install -t -y . --deps-only";
-      };
-      {
-        step with
-        step_name = Some "Building";
-        step_run = Some "opam exec -- dune build";
-      };
-      {
-        step with
-        step_name = Some "Testing";
-        step_run = Some "opam exec -- dune runtest";
-      };
+      step
+      |> with_step_name "Pinning Package"
+      |> with_step_run "opam pin add -n -y .";
+      step
+      |> with_step_name "Packages"
+      |> with_step_run ("opam depext -yt " ^ packages);
+      step
+      |> with_step_name "Dependencies"
+      |> with_step_run "opam install -t -y . --deps-only";
+      step
+      |> with_step_name "Building"
+      |> with_step_run "opam exec -- dune build";
+      step
+      |> with_step_name "Testing"
+      |> with_step_run "opam exec -- dune runtest";
     ]
   in
   let test_job =
     {
       test =
-        {
-          (job (expr "matrix.operating-system")) with
-          strategy = Some { strategy with matrix };
-          steps;
-        };
+        job (expr "matrix.operating-system")
+        |> with_strategy (strategy |> with_matrix matrix)
+        |> with_steps steps;
     }
   in
   let on = simple_event [ "push"; "pull_request" ] in
-  let w : test Types.t = { (t test_job) with name; on } in
+  let w : test Types.t = t test_job |> with_name name |> with_on on in
   Pp.workflow ~drop_null:true test_to_yaml Format.str_formatter w;
   Format.flush_str_formatter ()
 

@@ -7,48 +7,39 @@ let changes_to_yaml t : Yaml.value =
   `O [ ("changes", Types.job_to_yaml t.changes) ]
 
 let changes changes_file =
-  let name = Some "Checking changelog" in
-  let checkout = { step with uses = Some Config.checkout } in
+  let open Yaml_util in
+  let open Events in
+  let name = "Checking changelog" in
+  let checkout = step |> with_uses Config.checkout in
   let on =
     complex_event
-      {
-        Events.event with
-        pull_request =
-          Some
-            {
-              Events.push_or_pr with
-              types =
-                Some
-                  [
-                    "opened"; "synchronize"; "reopened"; "labeled"; "unlabeled";
-                  ];
-            };
-      }
+      (event
+      |> with_pull_request
+           (push_or_pr
+           |> with_types
+                [ "opened"; "synchronize"; "reopened"; "labeled"; "unlabeled" ]
+           ))
   in
   let steps =
     [
       checkout;
-      {
-        step with
-        step_name = Some "Diffing";
-        step_if =
-          Some
-            (expr
-               "!contains(github.event.pull_request.labels.*.name, \
-                'no-changelog-needed')");
-        step_env =
-          Some
-            (simple_kv
-               [
-                 ("BASE_REF", string (expr "github.event.pull_request.base.ref"));
-               ]);
-        step_run =
-          Some ("git diff --exit-code origin/$BASE_REF -- " ^ changes_file);
-      };
+      step
+      |> with_step_name "Diffing"
+      |> with_step_if
+           (expr
+              "!contains(github.event.pull_request.labels.*.name, \
+               'no-changelog-needed')")
+      |> with_step_env
+           (simple_kv
+              [
+                ("BASE_REF", string (expr "github.event.pull_request.base.ref"));
+              ])
+      |> with_step_run
+           ("git diff --exit-code origin/$BASE_REF -- " ^ changes_file);
     ]
   in
-  let diff_job = { changes = { (job "ubuntu-latest") with steps } } in
-  let w : changes Types.t = { (t diff_job) with name; on } in
+  let diff_job = { changes = job "ubuntu-latest" |> with_steps steps } in
+  let w : changes Types.t = t diff_job |> with_name name |> with_on on in
   Pp.workflow ~drop_null:true changes_to_yaml Format.std_formatter w
 
 let run fname =

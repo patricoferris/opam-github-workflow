@@ -1,15 +1,22 @@
 type kv = Yaml.value [@@deriving yaml]
+(** A Yaml key-value store -- this is exposed in order to be flexible with
+    things like environment variable names which cannot be dynamically decided
+    by the user if bound to a record type *)
 
 type env = kv
+(** The type of environment variables *)
 
 type output = kv
+(** The type of outputs *)
 
 type run = {
   run_shell : string; [@key "shell"]
   run_workdir : string; [@key "working-directory"]
 }
+(** The type of run statements *)
 
 type defaults = { default_run : run [@key "run"] }
+(** The type of defaults *)
 
 type container = {
   image : string option;
@@ -18,10 +25,12 @@ type container = {
   ports : int list option;
   volumes : string list option;
 }
+(** The type of docker containers *)
 
 type services = container
 
 type with_ = kv
+(** The type of input variables for external actions *)
 
 type step = {
   step_name : string option; [@key "name"]
@@ -36,12 +45,14 @@ type step = {
   services : services option;
   step_run : string option; [@key "run"]
 }
+(** The type of steps in a job *)
 
 type strategy = {
   matrix : kv option;
   fail_fast : bool option; [@key "fail-fast"]
   max_parallel : int option; [@key "max-parallel"]
 }
+(** The type of strategies to define things like matrices *)
 
 type job = {
   job_name : string option; [@key "name"]
@@ -56,8 +67,11 @@ type job = {
   needs : string option;
 }
 [@@deriving yaml]
+(** The type of jobs *)
 
-type on = List of string list | Complex of Events.t
+type on =
+  | List of string list
+  | Complex of Events.t  (** The type of triggers for the workflow *)
 
 type 'a t = {
   name : string option;
