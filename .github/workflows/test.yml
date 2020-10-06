@@ -1,0 +1,21 @@
+name: Tests for opam-github-workflow and github-workflow
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      operating-system: [macos-latest, ubuntu-latest, windows-latest]
+      ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: avsm/setup-ocaml@v1.1.2
+    - name: Pinning Package
+      run: opam pin add opam-github-workflow.dev github-workflow.dev -n .
+    - name: Packages
+      run: opam depext -yt opam-github-workflow github-workflow
+    - name: Dependencies
+      run: opam install -t . --deps-only
+    - name: Building
+      run: opam exec -- dune build
+    - name: Testing
+      run: opam exec -- dune runtest

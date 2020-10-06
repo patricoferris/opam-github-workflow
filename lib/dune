@@ -1,0 +1,6 @@
+(library
+ (name workflow)
+ (public_name github-workflow)
+ (libraries yaml)
+ (preprocess
+  (pps ppx_deriving_yaml)))
