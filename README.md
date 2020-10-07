@@ -22,7 +22,7 @@ $ opam install github-workflow
 
 The library follows the [workflow syntax](https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions) for Github Actions. Each key for the Yaml has a type such as `job` or `on` with each having a default that you can build on top of to produce new values. 
 
-To do this nicely, each type comes with some functions prefixed with `with_` allowing you to right them in a combinator fashion. For example: 
+To do this nicely, each type comes with some functions prefixed with `with_` allowing you to write them in a combinator fashion. For example: 
 
 ```ocaml env=example
 # #require "github-workflow"
