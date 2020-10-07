@@ -26,7 +26,25 @@ let get_opam_files () =
   OpamPinned.files_in_source (OpamFilename.Dir.of_string ".")
   |> remove_and_read []
 
-let test () =
+let dune_build_install_test =
+  [
+    step |> with_step_name "Building" |> with_step_run "opam exec -- dune build";
+    step
+    |> with_step_name "Installing"
+    |> with_step_run "opam exec -- dune install";
+    step
+    |> with_step_name "Testing"
+    |> with_step_run "opam exec -- dune runtest";
+  ]
+
+let opam_install_test =
+  [
+    step
+    |> with_step_name "Opam install and test"
+    |> with_step_run "opam install --with-test .";
+  ]
+
+let test dune () =
   let open Yaml_util in
   let opam = get_opam_files () in
   if List.length opam = 0 then raise NoOpamFiles;
@@ -47,6 +65,7 @@ let test () =
     |> with_with
          (simple_kv [ ("ocaml-version", string (expr "matrix.ocaml-version")) ])
   in
+  let build = if dune then dune_build_install_test else opam_install_test in
   let steps =
     [
       checkout;
@@ -60,13 +79,8 @@ let test () =
       step
       |> with_step_name "Dependencies"
       |> with_step_run "opam install -t -y . --deps-only";
-      step
-      |> with_step_name "Building"
-      |> with_step_run "opam exec -- dune build";
-      step
-      |> with_step_name "Testing"
-      |> with_step_run "opam exec -- dune runtest";
     ]
+    @ build
   in
   let test_job =
     {
@@ -81,11 +95,11 @@ let test () =
   Pp.workflow ~drop_null:true test_to_yaml Format.str_formatter w;
   Format.flush_str_formatter ()
 
-let run fname stdout =
+let run fname stdout dune =
   let pp_string s = Format.(pp_print_string std_formatter s) in
   let open Bos.OS in
   try
-    let output = test () in
+    let output = test dune () in
     let res =
       if stdout then (
         pp_string output;
@@ -133,8 +147,17 @@ let stdout =
   in
   Arg.(value & flag & info ~doc ~docv [ "s"; "stdout" ])
 
+let dune =
+  let docv = "DUNE" in
+  let doc =
+    "With this flag set, the workflow will run dune build, install and runtest \
+     after installing dependencies. The default behaviour is to run `opam \
+     install --with-test .'"
+  in
+  Arg.(value & flag & info ~doc ~docv [ "d"; "dune" ])
+
 let info =
   let doc = "Output a standard opam and dune testing workflow" in
   Term.info ~doc "test"
 
-let cmd = (Term.(const run $ fname $ stdout), info)
+let cmd = (Term.(const run $ fname $ stdout $ dune), info)
