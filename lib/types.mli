@@ -24,6 +24,7 @@ type container = {
   container_env : env option; [@key "env"]
   ports : int list option;
   volumes : string list option;
+  options : string option;
 }
 (** The type of docker containers *)
 
