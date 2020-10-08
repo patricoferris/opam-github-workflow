@@ -70,6 +70,8 @@ val with_ports : int list -> container -> container
 
 val with_volumes : string list -> container -> container
 
+val with_options : string -> container -> container
+
 (** {3 Steps}*)
 
 val step : step

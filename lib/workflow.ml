@@ -34,6 +34,7 @@ let container =
     container_env = None;
     ports = None;
     volumes = None;
+    options = None;
   }
 
 let with_image v c = { c with image = Some v }
@@ -45,6 +46,8 @@ let with_container_env v c = { c with container_env = Some v }
 let with_ports v c = { c with ports = Some v }
 
 let with_volumes v c = { c with volumes = Some v }
+
+let with_options v c = { c with options = Some v }
 
 (* Steps *)
 
