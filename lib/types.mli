@@ -41,8 +41,6 @@ type step = {
   with_ : with_ option; [@key "with"]
   step_if : string option; [@key "if"]
   continue_on_err : bool option; [@key "continue-on-error"]
-  container : container option;
-  services : services option;
   step_run : string option; [@key "run"]
 }
 (** The type of steps in a job *)
@@ -58,6 +56,8 @@ type job = {
   job_name : string option; [@key "name"]
   strategy : strategy option;
   runs_on : string; [@key "runs-on"]
+  container : container option;
+  services : services option;
   outputs : output option;
   job_env : env option; [@key "env"]
   job_defaults : defaults option; [@key "defaults"]

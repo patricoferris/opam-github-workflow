@@ -59,8 +59,6 @@ let step : step =
     with_ = None;
     step_if = None;
     continue_on_err = None;
-    container = None;
-    services = None;
   }
 
 let with_step_name v s = { s with step_name = Some v }
@@ -78,10 +76,6 @@ let with_with v s = { s with with_ = Some v }
 let with_step_if v s = { s with step_if = Some v }
 
 let with_continue_on_err v s = { s with continue_on_err = Some v }
-
-let with_container v s = { s with container = Some v }
-
-let with_services v s = { s with services = Some v }
 
 let with_step_run v s = { s with step_run = Some v }
 
@@ -110,6 +104,8 @@ let job runs_on : job =
     steps = [];
     timeout = None;
     strategy = None;
+    container = None;
+    services = None;
   }
 
 let with_job_name v j = { j with job_name = Some v }
@@ -117,6 +113,10 @@ let with_job_name v j = { j with job_name = Some v }
 let with_strategy v j = { j with strategy = Some v }
 
 let with_runs_on v j = { j with runs_on = v }
+
+let with_container v s = { s with container = Some v }
+
+let with_services v s = { s with services = Some v }
 
 let with_outputs v j = { j with outputs = Some v }
 

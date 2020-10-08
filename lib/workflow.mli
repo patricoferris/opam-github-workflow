@@ -91,10 +91,6 @@ val with_step_if : string -> step -> step
 
 val with_continue_on_err : bool -> step -> step
 
-val with_container : container -> step -> step
-
-val with_services : services -> step -> step
-
 val with_step_run : string -> step -> step
 
 (** {3 Strategy}*)
@@ -136,6 +132,10 @@ val with_steps : step list -> job -> job
 val with_timeout : int -> job -> job
 
 val with_needs : string -> job -> job
+
+val with_container : container -> job -> job
+
+val with_services : services -> job -> job
 
 (** {3 Workflow} *)
 
