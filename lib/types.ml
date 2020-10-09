@@ -29,13 +29,13 @@ type with_ = kv [@@deriving yaml]
 type step = {
   step_name : string option; [@key "name"]
   uses : string option;
+  step_run : string option; [@key "run"]
   step_env : env option; [@key "env"]
   step_workdir : string option; [@key "working-directory"]
   step_shell : string option; [@key "shell"]
   with_ : with_ option; [@key "with"]
   step_if : string option; [@key "if"]
   continue_on_err : bool option; [@key "continue-on-error"]
-  step_run : string option; [@key "run"]
 }
 [@@deriving yaml]
 
