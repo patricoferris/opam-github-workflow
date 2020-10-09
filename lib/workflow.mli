@@ -55,6 +55,10 @@ val with_run_shell : string -> run -> run
 
 val with_run_workdir : string -> run -> run
 
+val default : defaults
+
+val with_default_run : run -> defaults
+
 (** {3 Containers & Services}*)
 
 val container : container

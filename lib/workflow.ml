@@ -19,11 +19,15 @@ module Yaml_util = struct
 end
 
 (* Run *)
-let run = { run_shell = ""; run_workdir = "" }
+let run = { run_shell = None; run_workdir = None }
 
-let with_run_shell s r = { r with run_shell = s }
+let with_run_shell s r = { r with run_shell = Some s }
 
-let with_run_workdir s r = { r with run_workdir = s }
+let with_run_workdir s r = { r with run_workdir = Some s }
+
+let default = { default_run = run }
+
+let with_default_run r = { default_run = r }
 
 (* Container *)
 

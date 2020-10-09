@@ -5,8 +5,8 @@ type env = kv [@@deriving yaml]
 type output = kv [@@deriving yaml]
 
 type run = {
-  run_shell : string; [@key "shell"]
-  run_workdir : string; [@key "working-directory"]
+  run_shell : string option; [@key "shell"]
+  run_workdir : string option; [@key "working-directory"]
 }
 [@@deriving yaml]
 
