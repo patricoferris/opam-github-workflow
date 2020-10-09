@@ -10,7 +10,7 @@ let changes changes_file =
   let open Yaml_util in
   let open Events in
   let name = "Checking changelog" in
-  let checkout = step |> with_uses Config.checkout in
+  let checkout = step |> with_uses Conf.checkout in
   let on =
     complex_event
       (event

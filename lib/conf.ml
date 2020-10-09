@@ -6,4 +6,4 @@ let setup_ocaml = "avsm/setup-ocaml@v1.1.2"
 
 let checkout = "actions/checkout@v2"
 
-let output_dir = Fpath.v "./.github/workflows"
+let output_dir = "./.github/workflows"

@@ -54,14 +54,14 @@ let test dune () =
   let matrix =
     simple_kv
       [
-        ("operating-system", list string Config.oses);
-        ("ocaml-version", list string Config.ocaml_versions);
+        ("operating-system", list string Conf.oses);
+        ("ocaml-version", list string Conf.ocaml_versions);
       ]
   in
-  let checkout = { step with uses = Some Config.checkout } in
+  let checkout = { step with uses = Some Conf.checkout } in
   let setup =
     step
-    |> with_uses Config.setup_ocaml
+    |> with_uses Conf.setup_ocaml
     |> with_with
          (simple_kv [ ("ocaml-version", string (expr "matrix.ocaml-version")) ])
   in
@@ -105,8 +105,8 @@ let run fname stdout dune =
         pp_string output;
         Ok false)
       else
-        Dir.create Config.output_dir >>= fun _ ->
-        let output_path = Fpath.((Config.output_dir / fname) + "yml") in
+        Dir.create (Fpath.v Conf.output_dir) >>= fun _ ->
+        let output_path = Fpath.((v Conf.output_dir / fname) + "yml") in
         File.exists output_path >>= fun b ->
         if b then (
           pp_string "File already exists, doing nothing";
@@ -123,7 +123,7 @@ let run fname stdout dune =
         if b then (
           pp_string
             ("Successfully created test workflow in "
-            ^ Fpath.to_string Config.output_dir);
+            ^ Fpath.(to_string (v Conf.output_dir)));
           0)
         else 0
     | Error (`Msg m) ->

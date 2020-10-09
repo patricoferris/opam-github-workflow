@@ -6,4 +6,4 @@ val setup_ocaml : string
 
 val checkout : string
 
-val output_dir : Fpath.t
+val output_dir : string
