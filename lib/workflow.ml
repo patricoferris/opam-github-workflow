@@ -2,6 +2,7 @@ open Types
 module Types = Types
 module Events = Events
 module Pp = Pp
+module Conf = Conf
 
 module Yaml_util = struct
   let string s = `String s
