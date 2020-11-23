@@ -20,7 +20,7 @@ Source a project and try building a test workflow
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
+      - uses: avsm/setup-ocaml@v1
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Pinning Package
@@ -46,7 +46,7 @@ Passing stdout should print the workflow to standard out
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
+      - uses: avsm/setup-ocaml@v1
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Pinning Package
@@ -72,7 +72,7 @@ Using the dune flag should use dune build, install and runtest instead of opam
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
+      - uses: avsm/setup-ocaml@v1
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Pinning Package
