@@ -19,4 +19,4 @@ jobs:
     - name: Dependencies
       run: opam install -t -y . --deps-only
     - name: Opam install and test
-      run: dune build @install @runtest
+      run: opam exec -- dune build @install @runtest
