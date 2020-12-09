@@ -18,5 +18,9 @@ jobs:
       run: opam depext -yt opam-github-workflow github-workflow
     - name: Dependencies
       run: opam install -t -y . --deps-only
-    - name: Opam install and test
-      run: opam exec -- dune build @install @runtest
+    - name: Build
+      run: opam exec -- dune build 
+    - name: Install
+      run: opam exec -- dune install 
+    - name: Test
+      run: opam exec -- dune runtest 
