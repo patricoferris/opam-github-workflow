@@ -35,9 +35,9 @@ File "_none_", line 3, characters 27-29:
 Warning 14: illegal backslash escape in string.
 val steps : Types.step list =
   [{Workflow__.Types.step_name = Some "Hello \\o/"; uses = None;
-    step_env = None; step_workdir = None; step_shell = None; with_ = None;
-    step_if = None; continue_on_err = None; container = None;
-    services = None; step_run = Some "echo 'Hello World'"}]
+    step_run = Some "echo 'Hello World'"; step_env = None;
+    step_workdir = None; step_shell = None; with_ = None; step_if = None;
+    continue_on_err = None}]
 ```
 
 Then you can create a new job giving it any name you want by creating a new record type. Note you can generate the `to_yaml` function using [ppx_deriving_yaml](https://github.com/patricoferris/ppx_deriving_yaml) or by hand.
