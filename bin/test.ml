@@ -45,7 +45,7 @@ let pin_packages ps =
   in
   String.concat " " (aux [] ps)
 
-let test () =
+let test n =
   let open Yaml_util in
   let opam = get_opam_files () in
   if List.length opam = 0 then raise NoOpamFiles;
@@ -58,7 +58,7 @@ let test () =
     simple_kv
       [
         ("operating-system", list string Conf.oses);
-        ("ocaml-version", list string Conf.ocaml_versions);
+        ("ocaml-version", list string @@ Conf.ocaml_versions n);
       ]
   in
   let checkout = { step with uses = Some Conf.checkout } in
@@ -96,11 +96,18 @@ let test () =
   Pp.workflow ~drop_null:true test_to_yaml Format.str_formatter w;
   Format.flush_str_formatter ()
 
-let run fname stdout =
+let recent =
+  let docv = "RECENT" in
+  let doc =
+    "The n most recent OCaml versions to use based on OCaml-version library"
+  in
+  Arg.(value & opt int 3 & info ~doc ~docv [ "recent"; "r" ])
+
+let run recent fname stdout =
   let pp_string s = Format.(pp_print_string std_formatter s) in
   let open Bos.OS in
   try
-    let output = test () in
+    let output = test recent in
     let res =
       if stdout then (
         pp_string output;
@@ -152,4 +159,4 @@ let info =
   let doc = "Output a standard opam and dune testing workflow" in
   Term.info ~doc "test"
 
-let cmd = (Term.(const run $ fname $ stdout), info)
+let cmd = (Term.(const run $ recent $ fname $ stdout), info)

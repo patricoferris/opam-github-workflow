@@ -16,7 +16,7 @@ Source a project and try building a test workflow
       strategy:
         matrix:
           operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+          ocaml-version: [4.11.1, 4.10.1, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ Passing stdout should print the workflow to standard out
       strategy:
         matrix:
           operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.0, 4.10.0, 4.09.1]
+          ocaml-version: [4.11.1, 4.10.1, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
@@ -66,10 +66,32 @@ Passing stdout should print the workflow to standard out
       - name: Testing
         run: opam exec -- dune runtest
 
-Using the dune flag should use dune build, install and runtest instead of opam 
+Using a different number of 'recent version'
 
-  $ opam github-workflow test --dune --stdout
-  opam-github-workflow: unknown option `--dune'.
-  Usage: opam-github-workflow test [OPTION]... 
-  Try `opam-github-workflow test --help' or `opam-github-workflow --help' for more information.
-  [1]
+  $ opam github-workflow test --recent=5 --stdout
+  name: Tests for yaml
+  on: [push, pull_request]
+  jobs:
+    test:
+      strategy:
+        matrix:
+          operating-system: [macos-latest, ubuntu-latest, windows-latest]
+          ocaml-version: [4.11.1, 4.10.1, 4.09.1, 4.08.1, 4.07.1]
+      runs-on: ${{ matrix.operating-system }}
+      steps:
+      - uses: actions/checkout@v2
+      - uses: avsm/setup-ocaml@v1
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+      - name: Pinning Package
+        run: opam pin add -yn yaml.dev './'
+      - name: Packages
+        run: opam depext -yt yaml.dev
+      - name: Dependencies
+        run: opam install -t -y . --deps-only
+      - name: Building
+        run: opam exec -- dune build
+      - name: Installing
+        run: opam exec -- dune install
+      - name: Testing
+        run: opam exec -- dune runtest
