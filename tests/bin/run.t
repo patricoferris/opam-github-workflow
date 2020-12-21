@@ -20,17 +20,21 @@ Source a project and try building a test workflow
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
+      - uses: avsm/setup-ocaml@v1
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Pinning Package
-        run: opam pin add -n -y .
+        run: opam pin add -yn yaml.dev './'
       - name: Packages
-        run: opam depext -yt yaml
+        run: opam depext -yt yaml.dev
       - name: Dependencies
         run: opam install -t -y . --deps-only
-      - name: Opam install and test
-        run: opam install --with-test .
+      - name: Building
+        run: opam exec -- dune build
+      - name: Installing
+        run: opam exec -- dune install
+      - name: Testing
+        run: opam exec -- dune runtest
 
 Passing stdout should print the workflow to standard out 
 
@@ -46,39 +50,13 @@ Passing stdout should print the workflow to standard out
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
+      - uses: avsm/setup-ocaml@v1
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
       - name: Pinning Package
-        run: opam pin add -n -y .
+        run: opam pin add -yn yaml.dev './'
       - name: Packages
-        run: opam depext -yt yaml
-      - name: Dependencies
-        run: opam install -t -y . --deps-only
-      - name: Opam install and test
-        run: opam install --with-test .
-
-Using the dune flag should use dune build, install and runtest instead of opam 
-
-  $ opam github-workflow test --dune --stdout
-  name: Tests for yaml
-  on: [push, pull_request]
-  jobs:
-    test:
-      strategy:
-        matrix:
-          operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.0, 4.10.0, 4.09.1]
-      runs-on: ${{ matrix.operating-system }}
-      steps:
-      - uses: actions/checkout@v2
-      - uses: avsm/setup-ocaml@v1.1.2
-        with:
-          ocaml-version: ${{ matrix.ocaml-version }}
-      - name: Pinning Package
-        run: opam pin add -n -y .
-      - name: Packages
-        run: opam depext -yt yaml
+        run: opam depext -yt yaml.dev
       - name: Dependencies
         run: opam install -t -y . --deps-only
       - name: Building
@@ -87,3 +65,11 @@ Using the dune flag should use dune build, install and runtest instead of opam
         run: opam exec -- dune install
       - name: Testing
         run: opam exec -- dune runtest
+
+Using the dune flag should use dune build, install and runtest instead of opam 
+
+  $ opam github-workflow test --dune --stdout
+  opam-github-workflow: unknown option `--dune'.
+  Usage: opam-github-workflow test [OPTION]... 
+  Try `opam-github-workflow test --help' or `opam-github-workflow --help' for more information.
+  [1]

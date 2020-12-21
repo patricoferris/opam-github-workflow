@@ -37,20 +37,23 @@ let dune_build_install_test =
     |> with_step_run "opam exec -- dune runtest";
   ]
 
-let opam_install_test =
-  [
-    step
-    |> with_step_name "Opam install and test"
-    |> with_step_run "opam install --with-test .";
-  ]
+let pin_packages ps =
+  let rec aux acc = function
+    | [] -> List.rev acc
+    | [ x ] -> aux (("opam pin add -yn " ^ x ^ " './'") :: acc) []
+    | x :: xs -> aux (("opam pin add -yn " ^ x ^ " './' &&") :: acc) xs
+  in
+  String.concat " " (aux [] ps)
 
-let test dune () =
+let test () =
   let open Yaml_util in
   let opam = get_opam_files () in
   if List.length opam = 0 then raise NoOpamFiles;
   let packages = List.map (fun f -> OpamPackage.Name.to_string (fst f)) opam in
   let name = "Tests for " ^ join packages in
-  let packages = String.concat " " packages in
+  let packages = List.map (fun f -> f ^ ".dev") packages in
+  let joined_packages = String.concat " " packages in
+  let pinning = pin_packages packages in
   let matrix =
     simple_kv
       [
@@ -65,17 +68,15 @@ let test dune () =
     |> with_with
          (simple_kv [ ("ocaml-version", string (expr "matrix.ocaml-version")) ])
   in
-  let build = if dune then dune_build_install_test else opam_install_test in
+  let build = dune_build_install_test in
   let steps =
     [
       checkout;
       setup;
-      step
-      |> with_step_name "Pinning Package"
-      |> with_step_run "opam pin add -n -y .";
+      step |> with_step_name "Pinning Package" |> with_step_run pinning;
       step
       |> with_step_name "Packages"
-      |> with_step_run ("opam depext -yt " ^ packages);
+      |> with_step_run ("opam depext -yt " ^ joined_packages);
       step
       |> with_step_name "Dependencies"
       |> with_step_run "opam install -t -y . --deps-only";
@@ -95,11 +96,11 @@ let test dune () =
   Pp.workflow ~drop_null:true test_to_yaml Format.str_formatter w;
   Format.flush_str_formatter ()
 
-let run fname stdout dune =
+let run fname stdout =
   let pp_string s = Format.(pp_print_string std_formatter s) in
   let open Bos.OS in
   try
-    let output = test dune () in
+    let output = test () in
     let res =
       if stdout then (
         pp_string output;
@@ -147,17 +148,8 @@ let stdout =
   in
   Arg.(value & flag & info ~doc ~docv [ "s"; "stdout" ])
 
-let dune =
-  let docv = "DUNE" in
-  let doc =
-    "With this flag set, the workflow will run dune build, install and runtest \
-     after installing dependencies. The default behaviour is to run `opam \
-     install --with-test .'"
-  in
-  Arg.(value & flag & info ~doc ~docv [ "d"; "dune" ])
-
 let info =
   let doc = "Output a standard opam and dune testing workflow" in
   Term.info ~doc "test"
 
-let cmd = (Term.(const run $ fname $ stdout $ dune), info)
+let cmd = (Term.(const run $ fname $ stdout), info)
