@@ -20,8 +20,9 @@ let join s =
 let get_opam_files () =
   let rec remove_and_read acc = function
     | [] -> List.rev acc
-    | (Some f, g) :: xs -> remove_and_read ((f, OpamFile.OPAM.read g) :: acc) xs
-    | (None, _) :: xs -> remove_and_read acc xs
+    | (Some f, g, _) :: xs ->
+        remove_and_read ((f, OpamFile.OPAM.read g) :: acc) xs
+    | (None, _, _) :: xs -> remove_and_read acc xs
   in
   OpamPinned.files_in_source (OpamFilename.Dir.of_string ".")
   |> remove_and_read []

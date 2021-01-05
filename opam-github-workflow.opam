@@ -35,4 +35,7 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/patricoferris/opam-github-workflow.git"
+pin-depends: [
+  ["ocaml-version.dev" "git+https://github.com/ocurrent/ocaml-version"]
+]
 flags: plugin
