@@ -26,6 +26,7 @@
   opam-format
   opam-state
   github-workflow
+  ocaml-version
   (alcotest :with-test)
   (mdx :with-test)))
 

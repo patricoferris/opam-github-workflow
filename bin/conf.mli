@@ -1,6 +1,6 @@
 val oses : string list
 
-val ocaml_versions : string list
+val ocaml_versions : int -> string list
 
 val setup_ocaml : string
 

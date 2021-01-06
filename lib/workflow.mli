@@ -9,9 +9,6 @@ module Events = Events
 module Pp = Pp
 (** Pretty printers *)
 
-module Conf = Conf
-(** Configuration parameters like actions, OCaml versions etc. *)
-
 (** Yaml combinators *)
 module Yaml_util : sig
   val string : string -> Yaml.value

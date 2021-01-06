@@ -42,9 +42,7 @@ let changes changes_file =
   let w : changes Types.t = t diff_job |> with_name name |> with_on on in
   Pp.workflow ~drop_null:true changes_to_yaml Format.std_formatter w
 
-let run fname =
-  changes fname;
-  0
+let run fname = changes fname
 
 let fname =
   let docv = "FNAME" in

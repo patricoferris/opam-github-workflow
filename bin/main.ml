@@ -8,6 +8,6 @@ let main =
   ( Term.ret @@ Term.pure (`Help (`Pager, None)),
     Term.info "opam-github-workflow" ~doc )
 
-let main () = Term.(exit_status @@ eval_choice main cmds)
+let main () = Term.(exit @@ eval_choice main cmds)
 
 let () = main ()

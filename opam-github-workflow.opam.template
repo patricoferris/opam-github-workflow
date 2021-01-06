@@ -1,1 +1,4 @@
+pin-depends: [
+  ["ocaml-version.dev" "git+https://github.com/ocurrent/ocaml-version"]
+]
 flags: plugin
