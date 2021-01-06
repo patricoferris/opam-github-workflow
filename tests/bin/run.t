@@ -27,12 +27,8 @@ Source a project and try building a test workflow
         run: opam depext -yt yaml.dev
       - name: Dependencies
         run: opam install -t -y . --deps-only
-      - name: Building
-        run: opam exec -- dune build
-      - name: Installing
-        run: opam exec -- dune install
-      - name: Testing
-        run: opam exec -- dune runtest
+      - name: Building, Installing and Testing
+        run: opam exec -- dune build @install @runtest
 
 Using a different number of 'recent version'
 
@@ -57,12 +53,8 @@ Using a different number of 'recent version'
         run: opam depext -yt yaml.dev
       - name: Dependencies
         run: opam install -t -y . --deps-only
-      - name: Building
-        run: opam exec -- dune build
-      - name: Installing
-        run: opam exec -- dune install
-      - name: Testing
-        run: opam exec -- dune runtest
+      - name: Building, Installing and Testing
+        run: opam exec -- dune build @install @runtest
 
 Help page of the plugin 
 

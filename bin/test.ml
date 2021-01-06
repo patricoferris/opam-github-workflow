@@ -16,13 +16,9 @@ let join s =
 
 let dune_build_install_test =
   [
-    step |> with_step_name "Building" |> with_step_run "opam exec -- dune build";
     step
-    |> with_step_name "Installing"
-    |> with_step_run "opam exec -- dune install";
-    step
-    |> with_step_name "Testing"
-    |> with_step_run "opam exec -- dune runtest";
+    |> with_step_name "Building, Installing and Testing"
+    |> with_step_run "opam exec -- dune build @install @runtest";
   ]
 
 let test ?(oses = Conf.oses) n =

@@ -152,4 +152,4 @@ let info =
   in
   Term.info ~doc "ci"
 
-let cmd = (Term.(const run $ pure ()), info)
+let cmd = (Term.(const run $ const ()), info)
