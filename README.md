@@ -7,11 +7,40 @@ An opam plugin and library for building Github Action workflows in OCaml. For th
 
 ## Plugin Usage 
 
+We're still working out the kinks so you need to pin it!
+
 ```
 $ opam pin add --yes git+https://github.com/patricoferris/opam-github-workflow
 $ cd <my-cool-project>
 $ opam github-workflow test
 ```
+
+### OCaml-CI Behaviour 
+
+[OCaml-CI](https://github.com/ocurrent/ocaml-ci) is an OCurrent-powered CI pipeline for OCaml projects. If you can add yourself to that CI I would highly recommend it. Otherwise, you can make Github do the work for you by using the `opam github-workflow ci` command. This generates a similar workflow to what happens in OCaml-CI using docker images for the Linux distributions and the Github runners for MacOS and Windows. 
+
+The command takes a little time to run as it tries (like OCaml-CI) to be reproducible by: 
+
+  - Getting the latest *sha256* hash of the docker container 
+  - Getting the latest commit hash of the opam-repository 
+
+That means running this command twice may produce different results. A nice workflow is to add a `dune` file at the root of your project with the following contents: 
+
+```
+(dirs :standard .github)
+
+(rule
+ (with-stdout-to
+  data.out
+  (run opam github-workflow ci)))
+
+(rule
+ (alias ci)
+ (action
+  (diff ./.github/workflows/test.yml data.out)))
+```
+
+This allows you to run `dune build @ci` which will run the command and suggest changes to your workflow file for you. If you like the changes then you run `dune promote`. By default dune ignore files and directories that start with `.` and `_` hence the `(dirs :standard .github)`.
 
 ## Library Usage 
 
@@ -87,6 +116,11 @@ SYNOPSIS
 COMMANDS
        changes
            Output a git based check for changelog updates
+
+       ci  Generate a full OCaml-CI like workflow file for the latest version
+           of OCaml. This includes Debian 10 (Buster), Alpine 3.12, Ubuntu
+           20.04, Ubuntu 18.04, OpenSUSE 15.2 (Leap), CentOS 8, Fedora 32,
+           Macos and Windows
 
        test
            Output a standard opam and dune testing workflow

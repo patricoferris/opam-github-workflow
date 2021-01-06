@@ -1,2 +1,14 @@
 (mdx
  (files README.md))
+
+(dirs :standard .github)
+
+(rule
+ (with-stdout-to
+  data.out
+  (run opam github-workflow ci)))
+
+(rule
+ (alias ci)
+ (action
+  (diff ./.github/workflows/test.yml data.out)))
