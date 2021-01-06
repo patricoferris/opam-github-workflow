@@ -129,19 +129,14 @@ let run recent fname stdout =
     in
     match res with
     | Ok b ->
-        if b then (
+        if b then
           pp_string
             ("Successfully created test workflow in "
-            ^ Fpath.(to_string (v Conf.output_dir)));
-          0)
-        else 0
-    | Error (`Msg m) ->
-        pp_string m;
-        -1
+            ^ Fpath.(to_string (v Conf.output_dir)))
+    | Error (`Msg m) -> pp_string m
   with NoOpamFiles ->
     Format.pp_print_string Format.std_formatter
-      "No Opam files found in the current directory";
-    -1
+      "No Opam files found in the current directory"
 
 let fname =
   let docv = "FNAME" in

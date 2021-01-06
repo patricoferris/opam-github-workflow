@@ -2,7 +2,6 @@ Building a test workflow with no opam file prints error
 
   $ opam github-workflow test
   No Opam files found in the current directory
-  [255]
 
 Source a project and try building a test workflow
 
