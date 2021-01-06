@@ -105,30 +105,5 @@ jobs:
 
 ## Plugin Help 
 
-```sh
-$ opam github-workflow --help=plain
-NAME
-       opam-github-workflow - Opam Github Workflows
+See `tests/bin/run.t` for the help page of the plugin tool.
 
-SYNOPSIS
-       opam-github-workflow COMMAND ...
-
-COMMANDS
-       changes
-           Output a git based check for changelog updates
-
-       ci  Generate a full OCaml-CI like workflow file for the latest version
-           of OCaml. This includes Debian 10 (Buster), Alpine 3.12, Ubuntu
-           20.04, Ubuntu 18.04, OpenSUSE 15.2 (Leap), CentOS 8, Fedora 32,
-           Macos and Windows
-
-       test
-           Output a standard opam and dune testing workflow
-
-OPTIONS
-       --help[=FMT] (default=auto)
-           Show this help in format FMT. The value FMT must be one of `auto',
-           `pager', `groff' or `plain'. With `auto', the format is `pager` or
-           `plain' whenever the TERM env var is `dumb' or undefined.
-
-```
