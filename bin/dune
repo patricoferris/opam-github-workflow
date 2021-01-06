@@ -2,4 +2,7 @@
  (name main)
  (public_name opam-github-workflow)
  (package opam-github-workflow)
- (libraries bos cmdliner opam-format opam-state github-workflow ocaml-version))
+ (preprocess
+  (pps ppx_deriving_yaml))
+ (libraries bos cmdliner opam-format opam-state github-workflow ocaml-version
+   lwt lwt.unix dockerfile-opam yojson))
