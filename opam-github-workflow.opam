@@ -10,6 +10,10 @@ homepage: "https://github.com/patricoferris/opam-github-workflow"
 bug-reports: "https://github.com/patricoferris/opam-github-workflow/issues"
 depends: [
   "dune" {>= "2.7"}
+  "yojson" {>= "1.7.0"}
+  "ppx_deriving_yaml" {>= "0.1.0"}
+  "lwt" {>= "5.4.0"}
+  "dockerfile-opam" {>= "7.0.0"}
   "bos"
   "cmdliner"
   "opam-format"

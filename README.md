@@ -7,11 +7,39 @@ An opam plugin and library for building Github Action workflows in OCaml. For th
 
 ## Plugin Usage 
 
+We're still working out the kinks so you need to pin it!
+
 ```
 $ opam pin add --yes git+https://github.com/patricoferris/opam-github-workflow
 $ cd <my-cool-project>
 $ opam github-workflow test
 ```
+
+### OCaml-CI Behaviour 
+
+[OCaml-CI](https://github.com/ocurrent/ocaml-ci) is an OCurrent-powered CI pipeline for OCaml projects. If you can add yourself to that CI I would highly recommend it. Otherwise, you can make Github do the work for you by using the `opam github-workflow ci` command. This generates a similar workflow to what happens in OCaml-CI using docker images for the Linux distributions and the Github runners for MacOS and Windows. 
+
+The command takes a little time to run as it tries (like OCaml-CI) to be reproducible by: 
+
+  - Getting the latest *sha256* hash of the docker container 
+  - Getting the latest commit hash of the opam-repository 
+
+That means running this command twice may produce different results. A nice workflow is to add a `dune` file at the root of your project with the following contents: 
+
+```
+(dirs :standard .github)
+
+(rule
+ (alias ci)
+ (action
+  (progn
+   (with-stdout-to
+    data.out
+    (run opam github-workflow ci))
+   (diff? ./.github/workflows/test.yml data.out))))
+```
+
+This allows you to run `dune build @ci` which will run the command and suggest changes to your workflow file for you. If you like the changes then you run `dune promote`. By default dune ignore files and directories that start with `.` and `_` hence the `(dirs :standard .github)`.
 
 ## Library Usage 
 
@@ -76,25 +104,5 @@ jobs:
 
 ## Plugin Help 
 
-```sh
-$ opam github-workflow --help=plain
-NAME
-       opam-github-workflow - Opam Github Workflows
+See `tests/bin/run.t` for the help page of the plugin tool.
 
-SYNOPSIS
-       opam-github-workflow COMMAND ...
-
-COMMANDS
-       changes
-           Output a git based check for changelog updates
-
-       test
-           Output a standard opam and dune testing workflow
-
-OPTIONS
-       --help[=FMT] (default=auto)
-           Show this help in format FMT. The value FMT must be one of `auto',
-           `pager', `groff' or `plain'. With `auto', the format is `pager` or
-           `plain' whenever the TERM env var is `dumb' or undefined.
-
-```

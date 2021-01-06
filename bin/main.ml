@@ -1,6 +1,6 @@
 open Cmdliner
 
-let cmds = [ Test.cmd; Changes.cmd ]
+let cmds = [ Test.cmd; Changes.cmd; Ci.cmd ]
 
 let doc = "Opam Github Workflows"
 
