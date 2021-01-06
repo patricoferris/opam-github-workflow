@@ -16,7 +16,7 @@ Source a project and try building a test workflow
       strategy:
         matrix:
           operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.1, 4.10.1, 4.09.1]
+          ocaml-version: [4.11.1, 4.10.2, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
@@ -46,7 +46,7 @@ Passing stdout should print the workflow to standard out
       strategy:
         matrix:
           operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.1, 4.10.1, 4.09.1]
+          ocaml-version: [4.11.1, 4.10.2, 4.09.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
@@ -76,7 +76,7 @@ Using a different number of 'recent version'
       strategy:
         matrix:
           operating-system: [macos-latest, ubuntu-latest, windows-latest]
-          ocaml-version: [4.11.1, 4.10.1, 4.09.1, 4.08.1, 4.07.1]
+          ocaml-version: [4.11.1, 4.10.2, 4.09.1, 4.08.1, 4.07.1]
       runs-on: ${{ matrix.operating-system }}
       steps:
       - uses: actions/checkout@v2
