@@ -1,11 +1,10 @@
 (dirs :standard .github)
 
 (rule
- (with-stdout-to
-  data.out
-  (run opam github-workflow ci)))
-
-(rule
  (alias ci)
  (action
-  (diff ./.github/workflows/test.yml data.out)))
+  (progn
+   (with-stdout-to
+    data.out
+    (run opam github-workflow ci))
+   (diff? ./.github/workflows/test.yml data.out))))

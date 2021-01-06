@@ -57,7 +57,7 @@ jobs:
   alpine_3_12:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:8b2b0b0680a6a3967adc85eb9b35fa1c2053ffe61fedc693a86e40e985945249
+      image: ocaml/opam@sha256:04e3391376e43ecf644ed9919dc5bf1a23fddc078f6f2327140af19cc54e5f1f
       env:
         HOME: /home/opam
       options: --user 1000
@@ -189,7 +189,7 @@ jobs:
   centos_8:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:1cdf24f875d20d0367cb7c8282487470c7728265224002a339cdbe4440fe8a60
+      image: ocaml/opam@sha256:1f150cd450fd1b63819e336d41c7d8077e04b588cca9ad4b7d34bc24b3908b7b
       env:
         HOME: /home/opam
       options: --user 1000

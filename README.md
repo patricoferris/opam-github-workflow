@@ -30,14 +30,13 @@ That means running this command twice may produce different results. A nice work
 (dirs :standard .github)
 
 (rule
- (with-stdout-to
-  data.out
-  (run opam github-workflow ci)))
-
-(rule
  (alias ci)
  (action
-  (diff ./.github/workflows/test.yml data.out)))
+  (progn
+   (with-stdout-to
+    data.out
+    (run opam github-workflow ci))
+   (diff? ./.github/workflows/test.yml data.out))))
 ```
 
 This allows you to run `dune build @ci` which will run the command and suggest changes to your workflow file for you. If you like the changes then you run `dune promote`. By default dune ignore files and directories that start with `.` and `_` hence the `(dirs :standard .github)`.

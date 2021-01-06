@@ -31,7 +31,12 @@ module Docker = struct
            = Ov.string_of_arch arch)
     |> member "digest"
 
-  let peek ~arch ~tag = Os.read @@ manifest tag >|= extract_digest arch
+  let peek ~arch ~tag =
+    let env =
+      Array.concat
+        [ [| "DOCKER_CLI_EXPERIMENTAL=enabled" |]; Unix.environment () ]
+    in
+    Os.read ~env @@ manifest tag >|= extract_digest arch
 end
 
 module Platform = struct
