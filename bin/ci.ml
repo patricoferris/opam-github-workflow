@@ -1,6 +1,7 @@
 open Lwt.Infix
 open Workflow
-open Yaml_util
+
+(* open Yaml_util *)
 
 (* General idea from the ocurrent docker plugin https://github.com/ocurrent/ocurrent *)
 (* open Lwt.Infix *)
@@ -64,7 +65,7 @@ let workflow ~opam_hash ~from =
   let pinning = Opam.pin_packages packages in
   let package = "/home/opam/package" in
   let git_path = "package" in
-  let run_in_package = step in
+  let run_in_package = step |> with_step_workdir package in
   let steps =
     (match opam_hash with
     | Some opam_hash -> [ step |> with_step_run opam_hash ]
@@ -75,6 +76,9 @@ let workflow ~opam_hash ~from =
         |> with_step_name "Cloning"
         |> with_uses Conf.checkout
         |> with_with (simple_kv [ ("path", `String git_path) ]);
+        step
+        |> with_step_name "Move package"
+        |> with_step_run ("mv " ^ git_path ^ " " ^ package);
         run_in_package
         |> with_step_name "Pinning Packages"
         |> with_step_run pinning;
@@ -89,12 +93,11 @@ let workflow ~opam_hash ~from =
         |> with_step_run "opam exec -- dune build @install @runtest";
       ]
   in
-  job "ubuntu-latest"
-  |> with_steps steps
-  |> with_container (container from)
-  |> with_job_env (simple_kv [ ("HOME", `String "/home/opam") ])
-  |> with_job_defaults (with_default_run (run |> with_run_workdir "/home/opam"))
-  |> fun job -> { job }
+  job "ubuntu-latest" |> with_steps steps |> with_container (container from)
+  (* |> with_job_env (simple_kv [ ("HOME", `String "/home/opam") ]) *)
+  (* |> with_job_defaults (with_default_run (run |> with_run_workdir "/home/opam")) *)
+  |>
+  fun job -> { job }
 
 let macos_and_win =
   Test.test ~oses:[ "macos-latest"; "windows-latest" ] 1 |> snd |> fun t ->
