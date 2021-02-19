@@ -59,29 +59,22 @@ let container image =
   |> with_container_env (simple_kv [ ("OPAMROOT", `String "/home/opam/.opam") ])
 
 let workflow ~opam_hash ~from =
-  let open Yaml_util in
   let opam = Opam.get_opam_files () in
   if List.length opam = 0 then failwith "No opam files found";
   let packages = List.map (fun f -> OpamPackage.Name.to_string (fst f)) opam in
   let packages = List.map (fun f -> f ^ ".dev") packages in
   let joined_packages = String.concat " " packages in
   let pinning = Opam.pin_packages packages in
-  let package = "/home/opam/package" in
-  let git_path = "package" in
-  let run_in_package = step |> with_step_workdir package in
+  let _package = "/home/opam/package" in
+  let _git_path = "package" in
+  let run_in_package = step in
   let steps =
     (match opam_hash with
     | Some opam_hash -> [ step |> with_step_run opam_hash ]
     | None -> [])
     @ [
-        step |> with_step_run ("mkdir -p " ^ package);
-        step
-        |> with_step_name "Cloning"
-        |> with_uses Conf.checkout
-        |> with_with (simple_kv [ ("path", `String git_path) ]);
-        step
-        |> with_step_name "Move package"
-        |> with_step_run ("mv " ^ git_path ^ " " ^ package);
+        step |> with_step_name "Cloning" |> with_uses Conf.checkout;
+        (* |> with_with (simple_kv [ ("path", `String git_path) ]); *)
         run_in_package
         |> with_step_name "Pinning Packages"
         |> with_step_run pinning;
