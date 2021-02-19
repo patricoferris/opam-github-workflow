@@ -55,7 +55,7 @@ end
 let container image =
   container
   |> with_image image
-  |> with_options "--user 1000"
+  |> with_options "--user 0"
   |> with_container_env (simple_kv [ ("HOME", `String "/home/opam") ])
 
 let workflow ~opam_hash ~from =
