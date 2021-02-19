@@ -38,7 +38,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -69,7 +71,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -100,7 +104,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -131,7 +137,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -162,7 +170,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -193,7 +203,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
@@ -224,7 +236,9 @@ jobs:
     - name: Cloning
       uses: actions/checkout@v2
       with:
-        path: /home/opam/package
+        path: package
+    - name: Move package
+      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
