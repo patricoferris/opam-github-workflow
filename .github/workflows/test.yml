@@ -25,8 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:debian-10-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -52,8 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:alpine-3.12-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -79,8 +75,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:ubuntu-20.04-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -106,8 +100,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:ubuntu-18.04-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -133,8 +125,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:opensuse-15.2-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -160,8 +150,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:centos-8-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
@@ -187,8 +175,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ocaml/opam:fedora-32-ocaml-4.11
-      env:
-        HOME: /home/opam
       options: --user 0
     env:
       HOME: /home/opam
