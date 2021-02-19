@@ -74,7 +74,10 @@ let workflow ~opam_hash ~from =
     | None -> [])
     @ [
         step |> with_step_run ("mkdir -p " ^ package);
-        run_in_package |> with_step_name "Cloning" |> with_uses Conf.checkout;
+        step
+        |> with_step_name "Cloning"
+        |> with_uses Conf.checkout
+        |> with_with (simple_kv [ ("path", `String package) ]);
         run_in_package
         |> with_step_name "Pinning Packages"
         |> with_step_run pinning;
