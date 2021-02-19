@@ -15,7 +15,7 @@ module Docker = struct
     Fmt.str "ocaml/opam:%s-ocaml-%s" (Dd.tag_of_distro distro)
       (Ov.to_string ocv)
 
-  let mk_docker_sha = Fmt.str "ocaml/opam@%s"
+  let _mk_docker_sha = Fmt.str "ocaml/opam@%s"
 
   let manifest tag = [ "docker"; "manifest"; "inspect"; "--"; tag ]
 
@@ -31,7 +31,7 @@ module Docker = struct
            = Ov.string_of_arch arch)
     |> member "digest"
 
-  let peek ~arch ~tag =
+  let _peek ~arch ~tag =
     let env =
       Array.concat
         [ [| "DOCKER_CLI_EXPERIMENTAL=enabled" |]; Unix.environment () ]
@@ -69,27 +69,25 @@ let workflow ~opam_hash ~from =
   let package = "/home/opam/package" in
   let run_in_package = step |> with_step_workdir package in
   let steps =
-    [
-      step |> with_step_run opam_hash;
-      step |> with_step_run ("mkdir -p " ^ package);
-      run_in_package
-      |> with_step_name "Cloning"
-      |> with_step_run
-           "git clone https://github.com/$GITHUB_REPOSITORY . && git checkout \
-            $GITHUB_SHA";
-      run_in_package
-      |> with_step_name "Pinning Packages"
-      |> with_step_run pinning;
-      run_in_package
-      |> with_step_name "Installing external dependencies"
-      |> with_step_run ("opam depext -yt " ^ joined_packages);
-      run_in_package
-      |> with_step_name "Installing dependencies"
-      |> with_step_run "opam install -t -y . --deps-only";
-      run_in_package
-      |> with_step_name "Building, installing & testing"
-      |> with_step_run "opam exec -- dune build @install @runtest";
-    ]
+    (match opam_hash with
+    | Some opam_hash -> [ step |> with_step_run opam_hash ]
+    | None -> [])
+    @ [
+        step |> with_step_run ("mkdir -p " ^ package);
+        run_in_package |> with_step_name "Cloning" |> with_uses Conf.checkout;
+        run_in_package
+        |> with_step_name "Pinning Packages"
+        |> with_step_run pinning;
+        run_in_package
+        |> with_step_name "Installing external dependencies"
+        |> with_step_run ("opam depext -yt " ^ joined_packages);
+        run_in_package
+        |> with_step_name "Installing dependencies"
+        |> with_step_run "opam install -t -y . --deps-only";
+        run_in_package
+        |> with_step_name "Building, installing & testing"
+        |> with_step_run "opam exec -- dune build @install @runtest";
+      ]
   in
   job "ubuntu-latest"
   |> with_steps steps
@@ -113,16 +111,16 @@ let run () =
     |> String.lowercase_ascii
   in
   let ocv = Ov.(Releases.latest |> with_just_major_and_minor) in
-  let get_string = function
+  let _get_string = function
     | `String s -> s
     | _ -> failwith "Expected a string"
   in
-  let hash = Opam.reset_opam_repo () in
+  let hash = Lwt.return None in
   let tags =
     Lwt_list.map_p
       (fun d ->
-        Docker.peek ~arch:`X86_64 ~tag:(Docker.mk_docker_tag d ocv)
-        >|= fun sha -> (d, Docker.mk_docker_sha @@ get_string sha))
+        (* Docker.peek ~arch:`X86_64 ~tag:(Docker.mk_docker_tag d ocv) *)
+        Lwt.return (d, Docker.mk_docker_tag d ocv))
       Platform.default_platforms
   in
   Lwt_main.run

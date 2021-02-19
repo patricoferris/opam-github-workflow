@@ -24,7 +24,7 @@ jobs:
   debian_10_buster:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:4f908274fd1f29675761c0aee33a2e487b3cfb3394023458ce461339236f7d19
+      image: ocaml/opam:debian-10-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -34,12 +34,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -57,7 +54,7 @@ jobs:
   alpine_3_12:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:04e3391376e43ecf644ed9919dc5bf1a23fddc078f6f2327140af19cc54e5f1f
+      image: ocaml/opam:alpine-3.12-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -67,12 +64,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -90,7 +84,7 @@ jobs:
   ubuntu_20_04:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:006f06a95502bdd66e07a739bb39acf5ba77276b8bc6acf8ae25bd7de5205cb7
+      image: ocaml/opam:ubuntu-20.04-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -100,12 +94,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -123,7 +114,7 @@ jobs:
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:5de979c403ddf16498f636b3887c62fb6ce66a191ecf5d64d7819eaa2a80d776
+      image: ocaml/opam:ubuntu-18.04-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -133,12 +124,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -156,7 +144,7 @@ jobs:
   opensuse_15_2_leap:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:8e4cdf499f8c35e3278edf02d02aa8a5c33a79d6680cdf8cbfcd0369eefcdfdd
+      image: ocaml/opam:opensuse-15.2-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -166,12 +154,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -189,7 +174,7 @@ jobs:
   centos_8:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:1f150cd450fd1b63819e336d41c7d8077e04b588cca9ad4b7d34bc24b3908b7b
+      image: ocaml/opam:centos-8-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -199,12 +184,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
@@ -222,7 +204,7 @@ jobs:
   fedora_32:
     runs-on: ubuntu-latest
     container:
-      image: ocaml/opam@sha256:896b2c51e375f84369c467f04709b7ce5329bcd6e79403d25cc97f3172b97100
+      image: ocaml/opam:fedora-32-ocaml-4.11
       env:
         HOME: /home/opam
       options: --user 1000
@@ -232,12 +214,9 @@ jobs:
       run:
         working-directory: /home/opam
     steps:
-    - run: cd ~/opam-repository && (git cat-file -e bf94421703ae6d95113e5b24890f304701e47b78
-        || git fetch origin master) && git reset -q --hard bf94421703ae6d95113e5b24890f304701e47b78
-        && git log --no-decorate -n1 --oneline && opam update -u
     - run: mkdir -p /home/opam/package
     - name: Cloning
-      run: git clone https://github.com/$GITHUB_REPOSITORY . && git checkout $GITHUB_SHA
+      uses: actions/checkout@v2
       working-directory: /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
