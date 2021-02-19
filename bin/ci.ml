@@ -1,7 +1,6 @@
 open Lwt.Infix
 open Workflow
-
-(* open Yaml_util *)
+open Yaml_util
 
 (* General idea from the ocurrent docker plugin https://github.com/ocurrent/ocurrent *)
 (* open Lwt.Infix *)
@@ -53,7 +52,11 @@ module Platform = struct
     ]
 end
 
-let container image = container |> with_image image |> with_options "--user 0"
+let container image =
+  container
+  |> with_image image
+  |> with_options "--user 0"
+  |> with_container_env (simple_kv [ ("OPAMROOT", `String "/home/opam/.opam") ])
 
 let workflow ~opam_hash ~from =
   let open Yaml_util in
