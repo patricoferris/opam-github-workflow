@@ -39,21 +39,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   alpine_3_12:
     runs-on: ubuntu-latest
     container:
@@ -72,21 +66,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   ubuntu_20_04:
     runs-on: ubuntu-latest
     container:
@@ -105,21 +93,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
@@ -138,21 +120,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   opensuse_15_2_leap:
     runs-on: ubuntu-latest
     container:
@@ -171,21 +147,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   centos_8:
     runs-on: ubuntu-latest
     container:
@@ -204,21 +174,15 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package
   fedora_32:
     runs-on: ubuntu-latest
     container:
@@ -237,18 +201,12 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: package
-    - name: Move package
-      run: mv package /home/opam/package
     - name: Pinning Packages
       run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
         './'
-      working-directory: /home/opam/package
     - name: Installing external dependencies
       run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-      working-directory: /home/opam/package
     - name: Installing dependencies
       run: opam install -t -y . --deps-only
-      working-directory: /home/opam/package
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-      working-directory: /home/opam/package

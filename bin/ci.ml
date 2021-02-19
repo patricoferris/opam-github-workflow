@@ -68,7 +68,7 @@ let workflow ~opam_hash ~from =
   let pinning = Opam.pin_packages packages in
   let package = "/home/opam/package" in
   let git_path = "package" in
-  let run_in_package = step |> with_step_workdir package in
+  let run_in_package = step in
   let steps =
     (match opam_hash with
     | Some opam_hash -> [ step |> with_step_run opam_hash ]
@@ -79,9 +79,6 @@ let workflow ~opam_hash ~from =
         |> with_step_name "Cloning"
         |> with_uses Conf.checkout
         |> with_with (simple_kv [ ("path", `String git_path) ]);
-        step
-        |> with_step_name "Move package"
-        |> with_step_run ("mv " ^ git_path ^ " " ^ package);
         run_in_package
         |> with_step_name "Pinning Packages"
         |> with_step_run pinning;
