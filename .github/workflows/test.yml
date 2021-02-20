@@ -59,25 +59,6 @@ jobs:
       run: opam install -t -y . --deps-only
     - name: Building, installing & testing
       run: opam exec -- dune build @install @runtest
-  ubuntu_20_04:
-    runs-on: ubuntu-latest
-    container:
-      image: ocaml/opam:ubuntu-20.04-ocaml-4.11
-      env:
-        OPAMROOT: /home/opam/.opam
-      options: --user 0
-    steps:
-    - name: Cloning
-      uses: actions/checkout@v2
-    - name: Pinning Packages
-      run: opam pin add -yn opam-github-workflow.dev './' && opam pin add -yn github-workflow.dev
-        './'
-    - name: Installing external dependencies
-      run: opam depext -yt opam-github-workflow.dev github-workflow.dev
-    - name: Installing dependencies
-      run: opam install -t -y . --deps-only
-    - name: Building, installing & testing
-      run: opam exec -- dune build @install @runtest
   ubuntu_18_04:
     runs-on: ubuntu-latest
     container:
