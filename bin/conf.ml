@@ -10,7 +10,7 @@ let ocaml_versions n =
   in
   take n [] (List.rev OV.Releases.recent) |> List.map OV.to_string
 
-let setup_ocaml = "avsm/setup-ocaml@v1"
+let setup_ocaml = "ocaml/setup-ocaml@v2"
 
 let checkout = "actions/checkout@v2"
 
